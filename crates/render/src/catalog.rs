@@ -14,13 +14,6 @@ pub const PRESETS: &[Preset] = &[
         shader: serein_domain::DEFAULT_SHADER,
     },
     Preset {
-        id: "orbital",
-        name: "Orbital form",
-        description: "A floating, shaded 3D sphere with slow orbital movement.",
-        category: "3D · interactive",
-        shader: include_str!("../shaders/orbital.wgsl"),
-    },
-    Preset {
         id: "contour",
         name: "Contour field",
         description: "Topographic lines that breathe with the low end.",
@@ -28,32 +21,11 @@ pub const PRESETS: &[Preset] = &[
         shader: include_str!("../shaders/contour.wgsl"),
     },
     Preset {
-        id: "chrome",
-        name: "Liquid chrome",
-        description: "A sculptural 3D knot with metallic studio lighting.",
-        category: "3D · ray marched",
-        shader: include_str!("../shaders/chrome.wgsl"),
-    },
-    Preset {
         id: "dunes",
         name: "Dune horizon",
         description: "Layered desert silhouettes with mouse-driven depth.",
         category: "Landscape · parallax",
         shader: include_str!("../shaders/dunes.wgsl"),
-    },
-    Preset {
-        id: "space",
-        name: "Deep space",
-        description: "A star field, luminous planet and a quiet distant sun.",
-        category: "Space · 3D",
-        shader: include_str!("../shaders/space.wgsl"),
-    },
-    Preset {
-        id: "ocean",
-        name: "Ocean dusk",
-        description: "An endless moving ocean under a soft evening sky.",
-        category: "Landscape · animated",
-        shader: include_str!("../shaders/ocean.wgsl"),
     },
     Preset {
         id: "lattice",

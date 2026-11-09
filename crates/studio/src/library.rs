@@ -11,12 +11,8 @@ use serein_render::catalog::PRESETS;
 pub fn thumbnails() -> Vec<widget::image::Handle> {
     [
         include_bytes!("../assets/catalog/current.png").as_slice(),
-        include_bytes!("../assets/catalog/orbital.png").as_slice(),
         include_bytes!("../assets/catalog/contour.png").as_slice(),
-        include_bytes!("../assets/catalog/chrome.png").as_slice(),
         include_bytes!("../assets/catalog/dunes.png").as_slice(),
-        include_bytes!("../assets/catalog/space.png").as_slice(),
-        include_bytes!("../assets/catalog/ocean.png").as_slice(),
         include_bytes!("../assets/catalog/lattice.png").as_slice(),
         include_bytes!("../assets/catalog/aurora.png").as_slice(),
         include_bytes!("../assets/catalog/prism.png").as_slice(),

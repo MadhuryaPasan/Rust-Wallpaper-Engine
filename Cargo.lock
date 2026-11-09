@@ -3427,7 +3427,7 @@ dependencies = [
 
 [[package]]
 name = "serein-audio"
-version = "0.1.0"
+version = "0.1.1"
 dependencies = [
  "rustfft",
  "serein-domain",
@@ -3436,7 +3436,7 @@ dependencies = [
 
 [[package]]
 name = "serein-domain"
-version = "0.1.0"
+version = "0.1.1"
 dependencies = [
  "serde",
  "serde_json",
@@ -3445,7 +3445,7 @@ dependencies = [
 
 [[package]]
 name = "serein-platform"
-version = "0.1.0"
+version = "0.1.1"
 dependencies = [
  "serein-domain",
  "windows 0.62.2",
@@ -3453,7 +3453,7 @@ dependencies = [
 
 [[package]]
 name = "serein-player"
-version = "0.1.0"
+version = "0.1.1"
 dependencies = [
  "pollster",
  "raw-window-handle",
@@ -3470,7 +3470,7 @@ dependencies = [
 
 [[package]]
 name = "serein-render"
-version = "0.1.0"
+version = "0.1.1"
 dependencies = [
  "bytemuck",
  "image",
@@ -3482,7 +3482,7 @@ dependencies = [
 
 [[package]]
 name = "serein-studio"
-version = "0.1.0"
+version = "0.1.1"
 dependencies = [
  "bytemuck",
  "iced",
