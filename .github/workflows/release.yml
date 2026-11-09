@@ -1,0 +1,106 @@
+name: Windows release
+
+on:
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: release-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  windows:
+    runs-on: windows-2025
+    timeout-minutes: 60
+    permissions:
+      contents: write
+    defaults:
+      run:
+        shell: pwsh
+    steps:
+      - name: Check out tagged source
+        uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+
+      - name: Prepare Rust
+        run: |
+          rustup update stable --no-self-update
+          if ($LASTEXITCODE -ne 0) { throw 'Rust installation failed.' }
+          rustup default stable
+          rustup component add rustfmt clippy
+          rustup target add x86_64-pc-windows-msvc
+          if ($LASTEXITCODE -ne 0) { throw 'Rust components could not be installed.' }
+
+      - name: Validate release version
+        env:
+          RELEASE_REF_TYPE: ${{ github.ref_type }}
+          RELEASE_TAG: ${{ github.ref_name }}
+        run: |
+          . ./scripts/version.ps1
+          $tag = if ($env:RELEASE_REF_TYPE -eq 'tag') { $env:RELEASE_TAG } else { '' }
+          $version = Get-SereinVersion -ExpectedTag $tag
+          "SEREIN_VERSION=$version" >> $env:GITHUB_ENV
+
+      - name: Check formatting
+        run: cargo fmt --all --check
+
+      - name: Run tests
+        run: cargo test --workspace --locked
+
+      - name: Check lints
+        run: cargo clippy --workspace --all-targets --locked -- -D warnings
+
+      - name: Install Inno Setup compiler
+        run: ./scripts/setup-inno.ps1
+
+      - name: Build installer and portable package
+        env:
+          RELEASE_REF_TYPE: ${{ github.ref_type }}
+          RELEASE_TAG: ${{ github.ref_name }}
+        run: |
+          if ($env:RELEASE_REF_TYPE -eq 'tag') {
+            ./scripts/package.ps1 -Tag $env:RELEASE_TAG
+          } else {
+            ./scripts/package.ps1
+          }
+
+      - name: Verify installer and uninstaller
+        run: ./scripts/test-installer.ps1 -Installer "artifacts/$env:SEREIN_VERSION/Serein-$env:SEREIN_VERSION-windows-x64-setup.exe"
+
+      - name: Preserve release files
+        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6
+        with:
+          name: Serein-${{ env.SEREIN_VERSION }}-windows-x64
+          path: |
+            artifacts/${{ env.SEREIN_VERSION }}/*-setup.exe
+            artifacts/${{ env.SEREIN_VERSION }}/*-portable.zip
+            artifacts/${{ env.SEREIN_VERSION }}/SHA256SUMS.txt
+          if-no-files-found: error
+
+      - name: Publish tagged release
+        if: github.event_name == 'push' && github.ref_type == 'tag'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+          RELEASE_TAG: ${{ github.ref_name }}
+        run: |
+          $files = @(
+            "artifacts/$env:SEREIN_VERSION/Serein-$env:SEREIN_VERSION-windows-x64-setup.exe",
+            "artifacts/$env:SEREIN_VERSION/Serein-$env:SEREIN_VERSION-windows-x64-portable.zip",
+            "artifacts/$env:SEREIN_VERSION/SHA256SUMS.txt"
+          )
+          # Create as a draft first so failed uploads cannot publish an incomplete release.
+          gh release view $env:RELEASE_TAG *> $null
+          if ($LASTEXITCODE -ne 0) {
+            gh release create $env:RELEASE_TAG --verify-tag --draft --title "Serein $env:SEREIN_VERSION" --generate-notes
+            if ($LASTEXITCODE -ne 0) { throw 'Release creation failed.' }
+          }
+          gh release upload $env:RELEASE_TAG @files --clobber
+          if ($LASTEXITCODE -ne 0) { throw 'Release upload failed.' }
+          $prerelease = if ($env:SEREIN_VERSION.Contains('-')) { '--prerelease=true' } else { '--prerelease=false' }
+          gh release edit $env:RELEASE_TAG --draft=false $prerelease
+          if ($LASTEXITCODE -ne 0) { throw 'Release publication failed.' }

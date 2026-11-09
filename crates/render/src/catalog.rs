@@ -1,0 +1,80 @@
+pub struct Preset {
+    pub id: &'static str,
+    pub name: &'static str,
+    pub description: &'static str,
+    pub category: &'static str,
+    pub shader: &'static str,
+}
+pub const PRESETS: &[Preset] = &[
+    Preset {
+        id: "current",
+        name: "Chromatic current",
+        description: "A ribbon of warm light and cool color, shaped by your music.",
+        category: "Audio · shader",
+        shader: serein_domain::DEFAULT_SHADER,
+    },
+    Preset {
+        id: "orbital",
+        name: "Orbital form",
+        description: "A floating, shaded 3D sphere with slow orbital movement.",
+        category: "3D · interactive",
+        shader: include_str!("../shaders/orbital.wgsl"),
+    },
+    Preset {
+        id: "contour",
+        name: "Contour field",
+        description: "Topographic lines that breathe with the low end.",
+        category: "Generative · audio",
+        shader: include_str!("../shaders/contour.wgsl"),
+    },
+    Preset {
+        id: "chrome",
+        name: "Liquid chrome",
+        description: "A sculptural 3D knot with metallic studio lighting.",
+        category: "3D · ray marched",
+        shader: include_str!("../shaders/chrome.wgsl"),
+    },
+    Preset {
+        id: "dunes",
+        name: "Dune horizon",
+        description: "Layered desert silhouettes with mouse-driven depth.",
+        category: "Landscape · parallax",
+        shader: include_str!("../shaders/dunes.wgsl"),
+    },
+    Preset {
+        id: "space",
+        name: "Deep space",
+        description: "A star field, luminous planet and a quiet distant sun.",
+        category: "Space · 3D",
+        shader: include_str!("../shaders/space.wgsl"),
+    },
+    Preset {
+        id: "ocean",
+        name: "Ocean dusk",
+        description: "An endless moving ocean under a soft evening sky.",
+        category: "Landscape · animated",
+        shader: include_str!("../shaders/ocean.wgsl"),
+    },
+    Preset {
+        id: "lattice",
+        name: "Neon lattice",
+        description: "A perspective grid and a rising sun with a musical pulse.",
+        category: "Synthwave · audio",
+        shader: include_str!("../shaders/lattice.wgsl"),
+    },
+    Preset {
+        id: "aurora",
+        name: "Aurora veil",
+        description: "Soft curtains of northern light over a dark horizon.",
+        category: "Atmosphere · shader",
+        shader: include_str!("../shaders/aurora.wgsl"),
+    },
+    Preset {
+        id: "prism",
+        name: "Prism bloom",
+        description: "A rotating 3D crystal, lit from within.",
+        category: "3D · interactive",
+        shader: include_str!("../shaders/prism.wgsl"),
+    },
+];
+pub const IMAGE_SHADER: &str = "fn shade(uv: vec2<f32>, time: f32, audio: f32, pointer: vec2<f32>) -> vec3<f32> { return image_parallax(uv, pointer) * (1.0 + audio * 0.08); }";

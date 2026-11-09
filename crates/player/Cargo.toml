@@ -1,0 +1,22 @@
+[package]
+name = "serein-player"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+
+[dependencies]
+serein-domain = { path = "../domain" }
+serein-audio = { path = "../audio" }
+serein-render = { path = "../render" }
+serein-platform = { path = "../platform" }
+serde_json.workspace = true
+winit = "0.30"
+wgpu = "27"
+pollster = "0.4"
+raw-window-handle = "0.6"
+
+[build-dependencies]
+winresource = "0.1.34"
+
+[target.'cfg(windows)'.dependencies]
+windows = { version = "0.62", features = ["Win32_Foundation", "Win32_UI_WindowsAndMessaging"] }

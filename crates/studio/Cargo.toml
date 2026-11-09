@@ -1,0 +1,25 @@
+[package]
+name = "serein-studio"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+
+[dependencies]
+serein-domain = { path = "../domain" }
+serein-audio = { path = "../audio" }
+serein-render = { path = "../render" }
+serein-platform = { path = "../platform" }
+iced = { version = "0.14", features = ["canvas", "tokio", "highlighter", "image-without-codecs"] }
+naga = { version = "27", features = ["wgsl-in"] }
+bytemuck = { version = "1", features = ["derive"] }
+serde_json.workspace = true
+serde.workspace = true
+rfd = "0.17"
+
+[build-dependencies]
+winresource = "0.1.34"
+
+[target.'cfg(windows)'.dependencies]
+windows = { version = "0.62", features = ["Win32_Graphics_Gdi", "Win32_UI_WindowsAndMessaging", "Win32_Foundation", "Win32_UI_Accessibility"] }
+tray-icon = "0.21"
+

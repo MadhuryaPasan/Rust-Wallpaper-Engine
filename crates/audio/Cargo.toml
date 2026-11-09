@@ -1,0 +1,13 @@
+[package]
+name = "serein-audio"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+
+[dependencies]
+serein-domain = { path = "../domain" }
+rustfft = "6.4"
+
+[target.'cfg(windows)'.dependencies]
+wasapi = "0.27"
+

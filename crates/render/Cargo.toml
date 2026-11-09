@@ -1,0 +1,13 @@
+[package]
+name = "serein-render"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+
+[dependencies]
+serein-domain = { path = "../domain" }
+wgpu = "27"
+naga = { version = "27", features = ["wgsl-in"] }
+bytemuck = { version = "1", features = ["derive"] }
+image = { version = "0.25", default-features = false, features = ["png", "jpeg", "webp"] }
+pollster = "0.4"
